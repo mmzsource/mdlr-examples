@@ -1,4 +1,3 @@
-// tested on https://github.com/mmzsource/mdlr-js/tree/e0b6ef12e9a3d4c46344dbcdb8171125c03db95e
 mdlr('canvas', m => {
 
   const style = `width:100vw; height:100vh;`;
@@ -17,7 +16,6 @@ mdlr('canvas', m => {
 
   // particles
   const ps = [];
-  const pSize = 4;
   const maxPs = 64;
   const threshold = 100;
   const speed = 2.5;
@@ -33,7 +31,7 @@ mdlr('canvas', m => {
     ps.push(p);
   }
 
-  function drawCircle(ctx, x, y, radius, fill, stroke, strokeWidth) {
+  function drawCircle(x, y, radius, fill, stroke, strokeWidth) {
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
     ctx.fillStyle = fill;
@@ -55,6 +53,37 @@ mdlr('canvas', m => {
     return Math.sqrt(dy2 + dx2);
   }
 
+  function drawLine(d, p1, p2) {
+    let maxLineWidth = 2;
+    ctx.lineWidth = mapRange(d, 0, threshold, maxLineWidth, 0);
+    ctx.strokeStyle = 'white';
+    ctx.beginPath();
+    ctx.moveTo(p1.x, p1.y);
+    ctx.lineTo(p2.x, p2.y);
+    ctx.stroke();
+  }
+
+  function drawLines(p1) {
+    for (let j = 0; j < maxPs; j++) {
+      let p2 = ps[j];
+      let d = distance(p1, p2);
+
+      if (d < threshold) {
+        drawLine(d, p1, p2);
+      }
+    }
+  }
+
+  function move(p){
+    p.x = p.x + p.vx;
+    p.y = p.y + p.vy;
+  }
+
+  function bounce(p) {
+    if (p.x < 0 || p.x > canvasWidth) {p.vx = -p.vx}
+    if (p.y < 0 || p.y > canvasHeight) {p.vy = -p.vy}
+  }
+
   function animate() {
 
     requestAnimationFrame(animate);
@@ -62,37 +91,11 @@ mdlr('canvas', m => {
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
     for (let i = 0; i < maxPs; i++) {
-
       let p1 = ps[i];
-      drawCircle(ctx, p1.x, p1.y, 2, 'white', 'white', 1);
-
-      // lines
-      for (let j = 0; j < maxPs; j++) {
-
-        let p2 = ps[j];
-        let d = distance(p1, p2);
-
-        if (d < threshold) {
-
-          let maxLineWidth = 2;
-          ctx.lineWidth = mapRange(d, 0, threshold, maxLineWidth, 0);
-          ctx.strokeStyle = 'white';
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
-
-        }
-      }
-
-      // move
-      p1.x = p1.x + p1.vx;
-      p1.y = p1.y + p1.vy;
-
-      // bounce
-      if (p1.x < 0 || p1.x > canvasWidth) {p1.vx = -p1.vx};
-      if (p1.y < 0 || p1.y > canvasHeight) {p1.vy = -p1.vy};
-
+      drawCircle(p1.x, p1.y, 2, 'white', 'white', 1);
+      drawLines(p1);
+      move(p1);
+      bounce(p1);
     }
   }
 

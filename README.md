@@ -21,6 +21,9 @@ Prerequisites:
 
 The example will point to the version of mdlr it was tested on.
 
+- pull the complete mdlr-js repo
+- `git checkout <short commit-hash>`
+
 ## Linting
 
 tbd

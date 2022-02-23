@@ -19,6 +19,7 @@ mdlr('canvas', m => {
   const maxPs = 64;
   const threshold = 100;
   const speed = 2.5;
+  const ghostFactor = 0.001; // 0 = no ghosts, 1 = only ghosts
 
   // create maxPs
   for (let i = 0; i < maxPs; i++) {
@@ -26,7 +27,8 @@ mdlr('canvas', m => {
       x: Math.random() * canvasWidth,
       y: Math.random() * canvasHeight,
       vx: Math.random() * speed,
-      vy: Math.random() * speed
+      vy: Math.random() * speed,
+      ghost: (Math.random() < ghostFactor)
     }
     ps.push(p);
   }
@@ -92,8 +94,10 @@ mdlr('canvas', m => {
 
     for (let i = 0; i < maxPs; i++) {
       let p1 = ps[i];
-      drawCircle(p1.x, p1.y, 2, 'white', 'white', 1);
-      drawLines(p1);
+      if (p1.ghost == false) {
+        drawCircle(p1.x, p1.y, 2, 'white', 'white', 1);
+        drawLines(p1);
+      }
       move(p1);
       bounce(p1);
     }

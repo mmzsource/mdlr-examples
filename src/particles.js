@@ -19,7 +19,7 @@ mdlr('canvas', m => {
   const maxPs = 64;
   const threshold = 100;
   const speed = 2.5;
-  const ghostFactor = 0.001; // 0 = no ghosts, 1 = only ghosts
+  const ghostFactor = 0; // 0 = no ghosts, 1 = only ghosts
 
   // create maxPs
   for (let i = 0; i < maxPs; i++) {
@@ -90,8 +90,14 @@ mdlr('canvas', m => {
 
     requestAnimationFrame(animate);
 
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
+    if (ghostFactor !== 0) {
+      // alpha blending; ff = max blending, 00 = no blending
+      ctx.fillStyle = '#00000042'
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    } else {
+      ctx.clearRect(0,0,canvasWidth, canvasHeight);
+    }
     for (let i = 0; i < maxPs; i++) {
       let p1 = ps[i];
       if (p1.ghost == false) {

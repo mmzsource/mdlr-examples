@@ -1,3 +1,3 @@
 .DS_Store
-.sq-token
-.scannerwork/
+.eslintrc.json
+lint.sh

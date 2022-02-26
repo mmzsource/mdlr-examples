@@ -99,8 +99,8 @@ mdlr('canvas', m => {
       return units;
     } else {
       let result = [];
-      unitsCount = units.length;
-      for (i = index; i < unitsCount; i++) {
+      let unitsCount = units.length;
+      for (let i = index; i < unitsCount; i++) {
         let [p, left, center, right] = units[i];
         result.push(nextUnit(left));
         result.push(nextUnit(center));

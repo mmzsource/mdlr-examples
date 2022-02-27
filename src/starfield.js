@@ -1,24 +1,24 @@
 mdlr('canvas', m => {
 
   const style = `width:100vw; height:100vh;`;
-
   const doc = document.body;
-
   doc.innerHTML = `<canvas width=512 height=512 style="${style}"></canvas>`;
   doc.style.margin = "0";
   doc.style.overflow = "hidden";
 
   const canvas = doc.querySelector('canvas');
   const { width: canvasWidth, height: canvasHeight } = canvas;
-
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
   
   // config parameters
   const nrOfStars = 100;
   const speedup = 10;
+  const maxStartSize = 0.5;
+  const maxSize = 4;
 
   const stars = [];
+  const canvasCenter = {x: canvasWidth * 0.5, y: canvasHeight * 0.5}
 
   function generateRandom(min, max) {
     let num = Math.random() * (max - min + 1) + min;
@@ -27,19 +27,19 @@ mdlr('canvas', m => {
 
   function star() {
     let angle = generateRandom(0, 2 * Math.PI);
-    let distance = generateRandom(0, Math.min(canvasWidth * 0.5, canvasHeight * 0.5));
+    let dist = generateRandom(0, Math.min(canvasCenter.x, canvasCenter.y));
     // middle of canvas is the reference point for star generation
-    let x = canvasWidth * 0.5 + Math.cos(angle) * distance; 
-    let y = canvasHeight * 0.5 + Math.sin(angle) * distance;
+    let x = canvasCenter.x + Math.cos(angle) * dist; 
+    let y = canvasCenter.y + Math.sin(angle) * dist;
     let speed = generateRandom(0.001, 0.1);
-    return {x: x, y: y, angle: angle, speed: speed}
+    let size = generateRandom(0, maxStartSize);
+    return {x: x, y: y, angle: angle, speed: speed, 
+            startx: x, starty: y, startSize: size}
   }
-
 
   function movesOffCanvas(star){
     return star.x <= 0 || star.x >= canvasWidth || star.y <= 0 || star.y >= canvasHeight;
   }
-
 
   function starUpdater() {
     for (let i = 0; i < nrOfStars; i++) {
@@ -52,9 +52,27 @@ mdlr('canvas', m => {
     }
   }
 
+  // map a point p in a range from a1 to a2
+  // into a range from b1 to b2 (linearly)
+  function mapRange(p, a1, a2, b1, b2) {
+    return (b1 + ((p - a1) * (b2 - b1)) / (a2 - a1));
+  }
+
+  function distanceFromStart(star) {
+    let dx2 = Math.pow(Math.abs(star.x - star.startx), 2);
+    let dy2 = Math.pow(Math.abs(star.y - star.starty), 2);
+    return Math.sqrt(dy2 + dx2);
+  }
+
+  function size(star) {
+    let radius = Math.min(canvasWidth, canvasHeight);
+    let dist = distanceFromStart(star)
+    return mapRange (dist, 0, radius, star.startSize, maxSize);
+  }
+
   function drawCircle(star) {
     ctx.beginPath();
-    ctx.arc(star.x, star.y, 1, 0, 2 * Math.PI, false);
+    ctx.arc(star.x, star.y, size(star), 0, 2 * Math.PI, false);
     ctx.fillStyle = 'white';
     ctx.fill();
     ctx.lineWidth = 1;

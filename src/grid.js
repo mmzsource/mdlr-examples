@@ -10,14 +10,14 @@ mdlr('canvas', m => {
   const { width: canvasWidth, height: canvasHeight } = canvas;
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
-  
-  // grid has cols, rows and cells
+
+  // grid has cols & rows
   const nrOfCols = 4;
   const nrOfRows = 4;
   const grid = [];
-  const cellsToFill = [2, 11, 6, 16, 4, 9, 30];
 
-  // color cell and its neighbors.
+  // specify the cell numbers (one-based counting) that should be filled
+  const cellsToFill = [2, 11, 6, 16, 4, 9, 30];
 
   const cellWidth = canvasWidth / nrOfCols;
   const cellHeight = canvasHeight / nrOfRows;
@@ -37,11 +37,21 @@ mdlr('canvas', m => {
   }
 
   init();
-  
+
+    /*
+
+      Most functions above this comment 'reason' in rows and columns
+      from a zero based counting perspective.
+
+      The functions below this comment reason in cells or indexes of cells,
+      where the indexes start at 1 (top left corner of the grid)
+
+    */
+
   function cellCoords(cell) {
     // cell start x&y
-    let csx = cellWidth * cell.col - cellWidth; 
-    let csy = cellHeight * cell.row - cellHeight; 
+    let csx = cellWidth * cell.col - cellWidth;
+    let csy = cellHeight * cell.row - cellHeight;
     // cell middle x&y
     let cmx = csx + cellWidth * 0.5;
     let cmy = csy + cellHeight * 0.5;

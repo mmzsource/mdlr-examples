@@ -1,4 +1,4 @@
-mdlr('canvas', m => {
+mdlr('mmzsource:weeds-and-trees', m => {
 
   // Notice the scaleY(-1) transformation to move point 0,0 from top left to top bottom
   const style = `width:100vw; height:100vh; transform: scaleY(-1);`;
@@ -138,4 +138,4 @@ mdlr('canvas', m => {
 
 })
 
-mdlr('canvas');
+mdlr('mmzsource:weeds-and-trees');

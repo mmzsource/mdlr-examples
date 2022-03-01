@@ -1,4 +1,4 @@
-mdlr('canvas', m => {
+mdlr('mmzsource:grid', m => {
 
   const style = `width:100vw; height:100vh;`;
   const doc = document.body;
@@ -93,4 +93,4 @@ mdlr('canvas', m => {
 
 })
 
-mdlr('canvas');
+mdlr('mmzsource:grid');

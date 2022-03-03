@@ -80,7 +80,7 @@ mdlr('canvas', m => {
 
   function drawCell(cell, text, align, color){
       let {csx, csy, cmx, cmy} = cellCoords(cell);
-      let fontSize = (cmx - csx) / 2;
+      let fontSize = (cmx - csx) / 1.2;
       ctx.font = fontSize +"px Arial";
       ctx.textAlign = align;
       ctx.fillStyle = color;

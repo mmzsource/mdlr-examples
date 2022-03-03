@@ -12,11 +12,11 @@ mdlr('canvas', m => {
   ctx.fillStyle = 'white';
   
   // grid has cols, rows and cells
-  const nrOfCols = 25;
-  const nrOfRows = 25;
+  const nrOfCols = 64;
+  const nrOfRows = 64;
   const colWidth = canvasWidth / nrOfCols + 1;
   const rowHeight = canvasHeight / nrOfRows + 1;
-  const fadeFactor = 0.95;
+  const fadeFactor = 0.98;
   const gridDistortion = 0.25;
   const dotsOn = true; 
 

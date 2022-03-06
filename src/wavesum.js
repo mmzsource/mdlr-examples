@@ -1,4 +1,4 @@
-mdlr('mmzsource:fourier', m => {
+mdlr('mmzsource:wavesum', m => {
 
   const style = `width:100vw; height:100vh;`;
 
@@ -12,17 +12,17 @@ mdlr('mmzsource:fourier', m => {
   const { width: canvasWidth, height: canvasHeight } = canvas;
 
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'white';  
+  ctx.fillStyle = 'white';
 
   const spiralSpeed = 0.5;
   let waveStartX = 192;
-  
+
   let mainCircle = unitCircle(80, 80, 40, 0.06);
   let minorCircle = unitCircle(80, 240, 20, 0.10);
   // Check if the sum is correct by commenting above circles and uncommenting below circles
   // let mainCircle = unitCircle(80, 80, 40, 0.06);
   // let minorCircle = unitCircle(80, 240, 40, -0.06);
-  
+
   let ccSx = waveStartX;
   let ccPoints = [];
 
@@ -56,12 +56,12 @@ mdlr('mmzsource:fourier', m => {
   function unitCircle(x, y, radius, angleSpeed){
     let c = circle(x, y, radius);
     c.a = 0;            // startAngle
-    c.as = angleSpeed;  
+    c.as = angleSpeed;
     c.sx = waveStartX;  // spiral X ~ z axis of circle
     let d = circle(x + radius * Math.cos(c.a), y + c.r * Math.sin(c.a), 4);
     c.prev = {x: c.sx, y: d.y};
     c.next = {x: c.sx, y: d.y};
-    return {c: c, d: d, 
+    return {c: c, d: d,
             update: function update(){
                 this.c.prev = {x: this.c.sx, y: this.d.y}
                 this.c.a = this.c.a - this.c.as;
@@ -85,10 +85,10 @@ mdlr('mmzsource:fourier', m => {
     let sa = small.c.a;
     let dotX = sx + sr * Math.cos(sa);
     let dotY = sy + sr * Math.sin(sa);
-    return {offsetY: offsetY, bx: bx, by: by, br: br, ba: ba, 
-            sx: sx, sy: sy, sr: sr, sa: sa, 
+    return {offsetY: offsetY, bx: bx, by: by, br: br, ba: ba,
+            sx: sx, sy: sy, sr: sr, sa: sa,
             dotX: dotX, dotY: dotY}
-  } 
+  }
 
   function drawCompoundCircle(cc){
     // big circle + inner line
@@ -142,4 +142,4 @@ mdlr('mmzsource:fourier', m => {
 
 })
 
-mdlr('mmzsource:fourier');
+mdlr('mmzsource:wavesum');

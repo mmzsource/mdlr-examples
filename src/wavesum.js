@@ -17,14 +17,21 @@ mdlr('mmzsource:wavesum', m => {
   const spiralSpeed = 0.5;
   let waveStartX = 192;
 
-  let mainCircle = unitCircle(80, 80, 40, 0.06);
-  let minorCircle = unitCircle(80, 240, 20, 0.10);
-  // Check if the sum is correct by commenting above circles and uncommenting below circles
-  // let mainCircle = unitCircle(80, 80, 40, 0.06);
-  // let minorCircle = unitCircle(80, 240, 40, -0.06);
+  let mainCircle = {}, minorCircle = {}, ccSx = waveStartX, ccPoints = [];
 
-  let ccSx = waveStartX;
-  let ccPoints = [];
+  function init() {
+    mainCircle = unitCircle(80, 80, 40, 0.06);
+    minorCircle = unitCircle(80, 240, 20, 0.10);
+    
+    // Check if the sum is correct by commenting above circles and uncommenting below circles
+    // mainCircle = unitCircle(80, 80, 40, 0.06);
+    // minorCircle = unitCircle(80, 240, 40, -0.06);
+
+    ccSx = waveStartX;
+    ccPoints = [];
+  }
+
+  init();
 
   function drawCircle(x, y, radius, fill, stroke, strokeWidth) {
     ctx.beginPath();
@@ -128,12 +135,9 @@ mdlr('mmzsource:wavesum', m => {
     ctx.fillRect(waveStartX, 0, canvasWidth, canvasHeight);
 
     if (ccSx > canvasWidth) {
-      ccSx = waveStartX;
-      ccPoints = [];
       ctx.fillStyle = 'white';
       ctx.fillRect(0,0,canvasWidth, canvasHeight)
-      mainCircle = unitCircle(80, 80, 40, 0.06);
-      minorCircle = unitCircle(80, 240, 20, 0.10);
+      init();
     }
     ccSx = ccSx + spiralSpeed;
   }

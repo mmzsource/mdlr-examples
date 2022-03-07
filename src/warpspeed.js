@@ -1,4 +1,4 @@
-mdlr('canvas', m => {
+mdlr('mmzsource:warpspeed', m => {
 
   const style = `width:100vw; height:100vh;`;
   const doc = document.body;
@@ -100,4 +100,4 @@ mdlr('canvas', m => {
 
 })
 
-mdlr('canvas');
+mdlr('mmzsource:warpspeed');

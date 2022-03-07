@@ -1,4 +1,4 @@
-mdlr('canvas', m => {
+mdlr('mmzsource:particles', m => {
 
   const style = `width:100vw; height:100vh;`;
 
@@ -113,4 +113,4 @@ mdlr('canvas', m => {
 
 })
 
-mdlr('canvas');
+mdlr('mmzsource:particles');

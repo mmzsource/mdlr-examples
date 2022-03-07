@@ -1,4 +1,4 @@
-mdlr('canvas', m => {
+mdlr('mmzsource:ca-1d', m => {
 
   const style = `width:100vw; height:100vh;`;
   const doc = document.body;
@@ -147,4 +147,4 @@ mdlr('canvas', m => {
 
 })
 
-mdlr('canvas');
+mdlr('mmzsource:ca-1d');

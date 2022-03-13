@@ -19,7 +19,7 @@ mdlr('mmzsource:particles', m => {
   const speed = 2.5;     // speed of movement; adapt to your environment and preference
   const ghostFactor = 0; // 0 = no ghosts, 1 = only ghosts
 
-  function createParticle(){
+  function particle(){
     return {
       x: Math.random() * canvasWidth,
       y: Math.random() * canvasHeight,
@@ -29,7 +29,7 @@ mdlr('mmzsource:particles', m => {
     }
   }
 
-  const ps = Array.from({length: maxPs}, createParticle);
+  const ps = Array.from({length: maxPs}, particle);
 
   function drawCircle(x, y) {
     ctx.beginPath();

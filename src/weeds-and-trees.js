@@ -9,7 +9,7 @@ mdlr('mmzsource:weeds-and-trees', m => {
   doc.style.overflow = "hidden";
 
   const canvas = doc.querySelector('canvas');
-  const { width: canvasWidth, height: canvasHeight } = canvas;
+  const {width: canvasWidth} = canvas;
   const ctx = canvas.getContext('2d');
   
   /*
@@ -89,7 +89,7 @@ mdlr('mmzsource:weeds-and-trees', m => {
       let result = [];
       let unitsCount = units.length;
       for (let i = index; i < unitsCount; i++) {
-        let [p, left, center, right] = units[i];
+        let [, left, center, right] = units[i];
         result.push(nextUnit(left));
         result.push(nextUnit(center));
         result.push(nextUnit(right));
@@ -103,7 +103,7 @@ mdlr('mmzsource:weeds-and-trees', m => {
     let startLength = sl * cs;
     let p0 = {x: middle, y: 0, bt: rw};
     let p1 = {x: middle, y: startLength, offset: 90, length: startLength, bt: rw}
-    return [p0, p1];
+    return [p0, p1];  
   }
 
   function drawTree(){

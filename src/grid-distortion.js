@@ -33,6 +33,10 @@ mdlr('mmzsource:grid-distortion', m => {
     The xu,yu unit [0,0] represents the top left point.
     The xu,yu unit [1,0] represents the point right of the top left point.
     The xu,yu unit [0,1] represents the point below the top left point. 
+    (Too bad javascript CAN have these arrays as Map keys, but then CAN'T 
+    find them back in the Map because of the Array equality check which will 
+    only check for reference equality, not if all values in the Array are equal
+    ... therefore, I needed this ugly stringify 'in between' step)
   */
   function init() {
     for (let x = 0; x < nrOfCols + 1; x++){
@@ -50,7 +54,7 @@ mdlr('mmzsource:grid-distortion', m => {
       }
     }
   } 
-  
+
   init();
 
   function drawCircle(x, y) {
@@ -80,7 +84,6 @@ mdlr('mmzsource:grid-distortion', m => {
   }
 
   function animate() {
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     for (let x = 0; x < nrOfCols; x++){
       for (let y = 0; y < nrOfRows; y++){
         let pu = {xu: x, yu: y};
@@ -106,7 +109,6 @@ mdlr('mmzsource:grid-distortion', m => {
   }
 
   requestAnimationFrame(animate);
-
 })
 
 mdlr('mmzsource:grid-distortion');

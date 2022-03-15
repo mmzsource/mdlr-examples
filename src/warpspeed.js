@@ -60,8 +60,8 @@ mdlr('mmzsource:warpspeed', m => {
   }
 
   function distanceFromStart(star) {
-    let dx2 = Math.pow(Math.abs(star.x - star.startx), 2);
-    let dy2 = Math.pow(Math.abs(star.y - star.starty), 2);
+    let dx2 = Math.pow((star.x - star.startx), 2);
+    let dy2 = Math.pow((star.y - star.starty), 2);
     return Math.sqrt(dy2 + dx2);
   }
 

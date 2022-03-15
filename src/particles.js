@@ -48,8 +48,8 @@ mdlr('mmzsource:particles', m => {
   }
 
   function distance(p1, p2) {
-    let dx2 = Math.pow(Math.abs(p2.x - p1.x), 2);
-    let dy2 = Math.pow(Math.abs(p2.y - p1.y), 2);
+    let dx2 = Math.pow((p2.x - p1.x), 2);
+    let dy2 = Math.pow((p2.y - p1.y), 2);
     return Math.sqrt(dy2 + dx2);
   }
 

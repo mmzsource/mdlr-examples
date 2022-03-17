@@ -11,7 +11,25 @@ mdlr('mmzsource:grid-distortion', m => {
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
   
-  // grid has cols, rows and cells
+  class GridMap extends Map {
+    // If your grid exceeds these values, GridMap might not work, or worse: 
+    // still seem to work, but return wrong values
+    // 2**26 * 2**26 ~ MAX_SAFE_INTEGER.
+    #maxGridWidth = 2**26;
+    #diffX = 2**25;
+    #diffY = 2**25;
+
+    #index([x,y]) {
+      return this.#maxGridWidth * (y + this.#diffY) + (x + this.#diffX);
+    }
+    get(gridCoord) {
+      return super.get(this.#index(gridCoord));
+    }
+    set(gridCoord, value) {     
+      return super.set(this.#index(gridCoord), value);
+    }
+  }
+
   const nrOfCols = 64;
   const nrOfRows = 64;
   const colWidth = canvasWidth / nrOfCols + 1;
@@ -20,7 +38,7 @@ mdlr('mmzsource:grid-distortion', m => {
   const gridDistortion = 0.25;
   const dotsOn = true; 
 
-  const points = new Map();
+  const points = new GridMap();
   const dots = [];
 
   function distortionFactor() {
@@ -33,10 +51,6 @@ mdlr('mmzsource:grid-distortion', m => {
     The xu,yu unit [0,0] represents the top left point.
     The xu,yu unit [1,0] represents the point right of the top left point.
     The xu,yu unit [0,1] represents the point below the top left point. 
-    (Too bad javascript CAN have these arrays as Map keys, but then CAN'T 
-    find them back in the Map because of the Array equality check which will 
-    only check for reference equality, not if all values in the Array are equal
-    ... therefore, I needed this ugly stringify 'in between' step)
   */
   function init() {
     for (let x = 0; x < nrOfCols + 1; x++){
@@ -45,7 +59,7 @@ mdlr('mmzsource:grid-distortion', m => {
         let colDistortion = colWidth * distortionFactor();
         let rowDistortion = rowHeight * distortionFactor();
         points.set(
-          JSON.stringify({xu: x, yu: y}), 
+          [x,y],
           {x: x*colWidth - colWidth + colDistortion, 
            y: y*rowHeight - rowHeight + rowDistortion})
           let dotX = x * colWidth + (1 + distortionFactor()) * colWidth * 0.5;
@@ -86,10 +100,9 @@ mdlr('mmzsource:grid-distortion', m => {
   function animate() {
     for (let x = 0; x < nrOfCols; x++){
       for (let y = 0; y < nrOfRows; y++){
-        let pu = {xu: x, yu: y};
-        let p = points.get(JSON.stringify({xu: x, yu: y}));
-        let pr = points.get(JSON.stringify({xu: x + 1, yu: y}));
-        let pb = points.get(JSON.stringify({xu: x, yu: y + 1}));
+        let p = points.get([x,y]);
+        let pr = points.get([x+1,y]);
+        let pb = points.get([x,y+1]);
         // the further along the y-axis, the smaller chance the line will be drawn
         if(Math.random() > mapRange(p.y, 0, canvasHeight, 0, fadeFactor)){
           drawLine(p, pr);

@@ -82,13 +82,14 @@ mdlr('mmzsource:ca-1d', m => {
 
   function firstGeneration() {
     let chars = [];
-    for (i = 0; i < nrOfCols; i++){
-      if (Math.random() < 0.5) {
-        chars.push('0');
-      } else {
-        chars.push('1');
-      }
-    }
+    Array.from({length: nrOfCols}, 
+      function(){
+        if (Math.random() < 0.5) {
+          chars.push('0');
+        } else {
+          chars.push('1');
+        }}
+    );
     return chars.join("");
   }
 

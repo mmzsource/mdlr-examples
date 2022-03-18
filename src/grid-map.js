@@ -62,15 +62,12 @@ mdlr('[test]mmzsource:grid-map', m => {
 
     done();
   });  
-
 });
 
 if (true) {
-mdlr('[mdlr]test:runner', {args:{
-  args: { test: ['mmzsource:grid-map'] },
-  flags: { "show-passed": true }
-}})
-}
-else {
-mdlr('mmzsource:grid-map');
+  mdlr('[mdlr]test:runner', 
+    {args: {args:  { test: ['mmzsource:grid-map'] },
+            flags: { "show-passed": true }}})
+} else {
+  mdlr('mmzsource:grid-map');
 }

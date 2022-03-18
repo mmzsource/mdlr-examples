@@ -73,7 +73,7 @@ mdlr('mmzsource:ca-1d', m => {
     let lastTriplet = g.substr(-2, 2).concat(firstBit);
     let triplets = [];
     triplets.push(firstTriplet);
-    for (i = 0; i < g.length - 2; i++) {
+    for (let i = 0; i < g.length - 2; i++) {
       triplets.push(g.substr(i, 3))
     }
     triplets.push(lastTriplet);

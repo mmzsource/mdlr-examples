@@ -123,7 +123,7 @@ mdlr('mmzsource:wavesum', m => {
     drawUnitCircle(minorCircle, 'white', 'red');
     drawLine(minorCircle.c.prev, minorCircle.c.next, 'red');
 
-    cc = compoundCircle(mainCircle, minorCircle);
+    let cc = compoundCircle(mainCircle, minorCircle);
     drawCompoundCircle(cc);
     if (ccPoints.length >= 2) {
       drawLine(ccPoints[0], ccPoints[1], 'orange');

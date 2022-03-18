@@ -66,7 +66,7 @@ mdlr('mmzsource:snake', m => {
   }
 
   function debugCell(cell){
-    let {csx, csy, cmx, cmy} = cellCoords(cell);
+    let {csx, csy} = cellCoords(cell);
 
     if (showCellNrs) {
       drawCell(cell, cell.idx, "center", "lightblue")
@@ -80,7 +80,7 @@ mdlr('mmzsource:snake', m => {
   }
 
   function drawCell(cell, text, align, color){
-      let {csx, csy, cmx, cmy} = cellCoords(cell);
+      let {csx, cmx, cmy} = cellCoords(cell);
       let fontSize = (cmx - csx) / 1.2;
       ctx.font = fontSize +"px Arial";
       ctx.textAlign = align;
@@ -207,7 +207,7 @@ mdlr('mmzsource:snake', m => {
     if (crashIntoWall(currentHead) || eatsItself(currentHead)) {
       snake = createSnake();
       apple = createApple();
-      if (score > highscore) {highscore = score};
+      if (score > highscore) {highscore = score}
       score = 0;
       return;  
     }
@@ -257,7 +257,7 @@ mdlr('mmzsource:snake', m => {
   // listen to keyboard events to move the snake
   document.addEventListener('keydown', function(e) {
   
-    console.log(e.code + ' ' + e.keyCode)
+    // console.log(e.code + ' ' + e.keyCode)
 
     // prevent snake from backtracking on itself by checking that it's
     // not already moving on the same axis (pressing left while moving

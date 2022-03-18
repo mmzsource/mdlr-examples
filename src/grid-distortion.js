@@ -82,7 +82,6 @@ mdlr('mmzsource:grid-distortion', m => {
   }
 
   function drawLine(p1, p2) {
-    let maxLineWidth = 2;
     ctx.lineWidth = 1
     ctx.strokeStyle = 'white';
     ctx.beginPath();

@@ -31,7 +31,7 @@ mdlr('mmzsource:nn', m => {
          Later (if needed) faster algorithm, e.g: https://algo.kaust.edu.sa/Documents/cs372l01.pdf
          Maybe switch on number of points given on input.
       */
-      pairsWithinRadius = bruteForce(setOfPoints, radius);
+      let pairsWithinRadius = bruteForce(setOfPoints, radius);
       return pairsWithinRadius;
     }
   };

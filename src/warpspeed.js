@@ -1,4 +1,4 @@
-mdlr('mmzsource:starfield', m => {
+mdlr('mmzsource:warpspeed', m => {
 
   const style = `width:100vw; height:100vh;`;
   const doc = document.body;
@@ -17,7 +17,6 @@ mdlr('mmzsource:starfield', m => {
   const maxStartSize = 0.5;
   const maxSize = 4;
 
-  const stars = [];
   const canvasCenter = {x: canvasWidth * 0.5, y: canvasHeight * 0.5}
 
   function generateRandom(min, max) {
@@ -36,6 +35,8 @@ mdlr('mmzsource:starfield', m => {
     return {x: x, y: y, angle: angle, speed: speed, 
             startx: x, starty: y, startSize: size}
   }
+
+  const stars = Array.from({length: nrOfStars}, star);
 
   function movesOffCanvas(star){
     return star.x <= 0 || star.x >= canvasWidth || star.y <= 0 || star.y >= canvasHeight;
@@ -59,8 +60,8 @@ mdlr('mmzsource:starfield', m => {
   }
 
   function distanceFromStart(star) {
-    let dx2 = Math.pow(Math.abs(star.x - star.startx), 2);
-    let dy2 = Math.pow(Math.abs(star.y - star.starty), 2);
+    let dx2 = Math.pow((star.x - star.startx), 2);
+    let dy2 = Math.pow((star.y - star.starty), 2);
     return Math.sqrt(dy2 + dx2);
   }
 
@@ -80,24 +81,23 @@ mdlr('mmzsource:starfield', m => {
     ctx.stroke();
   }
  
-  function animate() {
+  function clearFrame(){
     ctx.fillStyle = '#00000042' // use alpha for star-tail
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    requestAnimationFrame(animate);
+  }
+
+  function drawFrame(){
     starUpdater();
     stars.map(drawCircle)
   }
 
-  function init(){
-    for (let i = 0; i < nrOfStars; i++){
-      stars.push(star());
-    }
+  function animate() {
+    requestAnimationFrame(animate);
+    clearFrame();
+    drawFrame();
   }
 
-  init();
-
   requestAnimationFrame(animate);
-
 })
 
-mdlr('mmzsource:starfield');
+mdlr('mmzsource:warpspeed');

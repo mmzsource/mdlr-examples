@@ -9,17 +9,9 @@ mdlr('mmzsource:weeds-and-trees', m => {
   doc.style.overflow = "hidden";
 
   const canvas = doc.querySelector('canvas');
-  const { width: canvasWidth, height: canvasHeight } = canvas;
+  const {width: canvasWidth} = canvas;
   const ctx = canvas.getContext('2d');
   
-  /*
-     CPU saver. But sometimes you DO want the animated effect.
-     In those cases, adjust a noise factor and change the animate function
-     to ignore the refresh flag.
-  */
-  let refresh = true;
-  ctx.onkeypressed = (function () {requestAnimationFrame(animate)})
-
   /*
      (l)eft, (c)enter and (r)ight branch length (s)hrink percentage
      (l)eft, (c)enter and (r)ight branch (a)ngle
@@ -41,12 +33,12 @@ mdlr('mmzsource:weeds-and-trees', m => {
 
   // weed1: [0.35, 0.85, 0.35, 20, 3, -23, 0, 0, 100, 1.2, 0.9, 8];
   // weed2: [0.3, 0.6, 0.4, 80, 5, -40, 20, 0.1, 250, 1.5, 0.8, 8];
-  // weed3: [0.4, 0.8, 0.4, 20, 2, -20, 10, 0, 140, 5, 0.8, 8];
+  // weed3: [0.4, 0.8, 0.4, 20, 2, -20, 4, 0, 140, 5, 0.8, 8];
   // weed4: [0.5, 0.5, 0.5, 35, 4, -25, -15, 0, 350, 5, 0.6, 8];
   // tree: [0.65, 0.7, 0.65, 35, 4, -25, -15, 0, 200, 5, 0.6, 8]; 
   let [ls, cs, rs, la, ca, ra, an, ln, sl, rw, wr, d] = 
       [0.35, 0.85, 0.35, 20, 3, -23, 0, 0, 100, 1.2, 0.9, 8];
- 
+  
   function drawLine(p1, p2) {
     ctx.lineWidth = p2.bt;
     ctx.strokeStyle = 'white';
@@ -73,7 +65,6 @@ mdlr('mmzsource:weeds-and-trees', m => {
     return {x: x, y: y, offset: angle, length: nextLength, bt: branchThickness}
   }
 
-
   function nextUnit(p) {
     let left = nextPoint(p, la, ls);
     let center = nextPoint(p, ca, cs);
@@ -81,18 +72,15 @@ mdlr('mmzsource:weeds-and-trees', m => {
     return [p, left, center, right];
   }
 
-
   function drawUnit([p, left, center, right]) {
     drawLine(p, left);
     drawLine(p, center);
     drawLine(p, right);
   }
 
-
   function drawUnits(units){
     units.map(drawUnit);
   }
-
 
   function calculateUnits(units, depth, index) {
     if (depth < 1) {
@@ -101,7 +89,7 @@ mdlr('mmzsource:weeds-and-trees', m => {
       let result = [];
       let unitsCount = units.length;
       for (let i = index; i < unitsCount; i++) {
-        let [p, left, center, right] = units[i];
+        let [, left, center, right] = units[i];
         result.push(nextUnit(left));
         result.push(nextUnit(center));
         result.push(nextUnit(right));
@@ -110,32 +98,33 @@ mdlr('mmzsource:weeds-and-trees', m => {
     }
   }
 
-
-  function animate() {
-
-    if (refresh == true) {
-      requestAnimationFrame(animate);  
-    }
-
-    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-
+  function calcRootPoints(){
     let middle = canvasWidth / 2;
     let startLength = sl * cs;
     let p0 = {x: middle, y: 0, bt: rw};
     let p1 = {x: middle, y: startLength, offset: 90, length: startLength, bt: rw}
+    return [p0, p1];  
+  }
 
-    drawLine(p0, p1); // the root
+  function drawTree(){
+    // Root
+    let [p0, p1] = calcRootPoints();
+    drawLine(p0, p1); 
 
+    // Rest
     let unit = nextUnit(p1);
     let units = [];
     units.push(unit);
     let depthOfTree = Math.min(d ?? 8, 8);
-    drawUnits(calculateUnits(units, depthOfTree, 0));
-    refresh = false;
+    let calcUnits = calculateUnits(units, depthOfTree, 0);
+    drawUnits(calcUnits);
+  }
+
+  function animate() {
+    drawTree();
   }
 
   requestAnimationFrame(animate);
-
 })
 
 mdlr('mmzsource:weeds-and-trees');

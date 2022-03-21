@@ -14,32 +14,30 @@ mdlr('mmzsource:particles', m => {
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = 'white';
 
-  // particles
-  const ps = [];
-  const maxPs = 64;
-  const threshold = 100;
-  const speed = 2.5;
+  const maxPs = 64;      // max nr of particles
+  const threshold = 100; // threshold distance between particles at which a line should be drawn
+  const speed = 2.5;     // speed of movement; adapt to your environment and preference
   const ghostFactor = 0; // 0 = no ghosts, 1 = only ghosts
 
-  // create maxPs
-  for (let i = 0; i < maxPs; i++) {
-    let p = {
+  function particle(){
+    return {
       x: Math.random() * canvasWidth,
       y: Math.random() * canvasHeight,
       vx: Math.random() * speed,
       vy: Math.random() * speed,
       ghost: (Math.random() < ghostFactor)
     }
-    ps.push(p);
   }
 
-  function drawCircle(x, y, radius, fill, stroke, strokeWidth) {
+  const ps = Array.from({length: maxPs}, particle);
+
+  function drawCircle(x, y) {
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-    ctx.fillStyle = fill;
+    ctx.arc(x, y, 2, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'white';
     ctx.fill();
-    ctx.lineWidth = strokeWidth;
-    ctx.strokeStyle = stroke;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'white';
     ctx.stroke();
   }
 
@@ -50,8 +48,8 @@ mdlr('mmzsource:particles', m => {
   }
 
   function distance(p1, p2) {
-    let dx2 = Math.pow(Math.abs(p2.x - p1.x), 2);
-    let dy2 = Math.pow(Math.abs(p2.y - p1.y), 2);
+    let dx2 = Math.pow((p2.x - p1.x), 2);
+    let dy2 = Math.pow((p2.y - p1.y), 2);
     return Math.sqrt(dy2 + dx2);
   }
 
@@ -66,14 +64,12 @@ mdlr('mmzsource:particles', m => {
   }
 
   function drawLines(p1) {
-    for (let j = 0; j < maxPs; j++) {
-      let p2 = ps[j];
+    ps.forEach(p2 => {
       let d = distance(p1, p2);
-
       if (d < threshold) {
         drawLine(d, p1, p2);
       }
-    }
+    });
   }
 
   function move(p){
@@ -86,27 +82,31 @@ mdlr('mmzsource:particles', m => {
     if (p.y < 0 || p.y > canvasHeight) {p.vy = -p.vy}
   }
 
-  function animate() {
-
-    requestAnimationFrame(animate);
-
-
+  function clearFrame(){
     if (ghostFactor !== 0) {
       // alpha blending; ff = max blending, 00 = no blending
       ctx.fillStyle = '#00000042'
       ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     } else {
       ctx.clearRect(0,0,canvasWidth, canvasHeight);
-    }
-    for (let i = 0; i < maxPs; i++) {
-      let p1 = ps[i];
-      if (p1.ghost == false) {
-        drawCircle(p1.x, p1.y, 2, 'white', 'white', 1);
-        drawLines(p1);
+    }  
+  }
+
+  function drawFrame(){
+    ps.forEach(p => {
+      if (p.ghost == false){
+        drawCircle(p.x, p.y);
+        drawLines(p);
       }
-      move(p1);
-      bounce(p1);
-    }
+      move(p);
+      bounce(p);
+    });
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    clearFrame();
+    drawFrame();
   }
 
   requestAnimationFrame(animate);
